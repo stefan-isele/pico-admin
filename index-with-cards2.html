@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Building dashboard with grid and flex</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1.*/css/pico.min.css">
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* Prevents the whole page from scrolling */
+        box-sizing: border-box;
+      }
+      .grid-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 50px 1fr 50px;
+        grid-template-areas:
+          'header'
+          'main'
+          'footer';
+        height: 100vh;
+        overflow: hidden; /* Prevents the whole page from scrolling */
+      }
+      .header {
+        grid-area: header;
+      }
+      .main {
+        grid-area: main;
+        overflow-y: auto; /* Makes only the main section scrollable */
+      }
+      .footer {
+        grid-area: footer;
+      }
+      @media only screen and (min-width: 750px) {
+        .grid-container {
+          grid-template-columns: 240px 1fr;
+          grid-template-rows: 50px 1fr 50px;
+          grid-template-areas:
+            'aside header'
+            'aside main'
+            'aside footer';
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid-container">
+      <header class="header container-fluid">
+        <nav class="container">
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </nav>
+      </header>
+      <aside class="aside container">
+        <nav>
+          <ul>
+            <li><a href="#">Menu item1</a></li>
+            <li><a href="#">Menu item2</a></li>
+            <li><a href="#">Menu item3</a></li>
+            <li><a href="#">Menu item4</a></li>
+            <li><a href="#">Menu item5</a></li>
+          </ul>
+        </nav>
+      </aside>
+      <main class="main container">
+        <section class="main_overview">
+          <article class="overview_card">
+            <h2>Overview</h2>
+            <p>Card content</p>
+          </article>
+          <article class="overview_card">
+            <h2>Overview</h2>
+            <p>Card content</p>
+          </article>
+        </section>
+        <section class="main_cards">
+          <article class="card">
+            <h2>Card 1</h2>
+            <p>Card content</p>
+          </article>
+          <article class="card">
+            <h2>Card 2</h2>
+            <p>Card content</p>
+          </article>
+          <article class="card">
+            <h2>Card 3</h2>
+            <p>Card content</p>
+          </article>
+        </section>
+      </main>
+      <footer class="footer container-fluid">
+        <p>&copy;2020 Made with &hearts;</p>
+      </footer>
+    </div>
+  </body>
+</html>

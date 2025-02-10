@@ -1,195 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Building dashboard with gird and flex</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1.*/css/pico.min.css">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.*/css/pico.min.css">
     <style>
-      body {
-        margin: 0;
-        padding: 0;
-        color: white;
-        box-sizing: border-box;     
-        
-      }
-      .grid-container {
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-template-rows: 50px 1fr 50px;
-
-        grid-template-areas:
-          'header'
-          'main'
-          'footer';
-        height: 100vh;
-      }
-
-      .header {
-        grid-area: header;
-        background-color: whitesmoke;
-      }
-
-      .aside {
-        grid-area: aside;
-        background-color: darkblue;
-      }
-
-      .main {
-        grid-area: main;
-        background-color: white;
-      }
-      .footer {
-        grid-area: footer;
-        background-color: whitesmoke;
-      }
-
-      /* flexing header and footer*/
-      .header,
-      .footer {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        color: darkblue;
-        padding: 0 15px;
-      }
-
-      /* flexing aside */
-      .aside {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        width: 240px;
-        position: fixed;
-        overflow-y: auto;
-        z-index: 2;
-        transform: translateX(-245px);
-      }
-
-      .aside.active {
-        transform: translateX(0);
-      }
-
-      .aside_list {
-        padding: 0;
-        margin-top: 85px;
-        list-style-type: none;
-      }
-
-      .aside_list-item {
-        padding: 20px 20px 20px 40px;
-        color: #ddd;
-      }
-
-      .aside_list-item:hover {
-        background-color: royalblue;
-        cursor: pointer;
-      }
-    
-
-      /* responsive layout */
-      @media only screen and (min-width: 750px) {
-        .grid-container {
-          display: grid;
-          grid-template-columns: 240px 1fr;
-          grid-template-rows: 50px 1fr 50px;
-          grid-template-areas:
-            'aside header'
-            'aside main'
-            'aside footer';
-          height: 100vh;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            display: grid;
+            grid-template-areas: 
+                "sidebar header"
+                "sidebar content"
+                "sidebar footer";
+            grid-template-columns: 200px 1fr;
+            grid-template-rows: 60px 1fr 40px;
+            height: 100vh;
+        }
+        .sidebar {
+            grid-area: sidebar;
+            padding: 15px;
+            background-color: var(--pico-form-element-background-color);
+            color: var(--secondary-background);
+        }
+        .header {
+            grid-area: header;
+            padding: 15px;
+            
+        }
+        .content {
+            grid-area: content;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: var(--background);
+            color: var(--foreground);
+        }
+        .footer {
+            grid-area: footer;
+            text-align: center;
+            padding: 10px;
+            background-color: var(--muted);
+            color: var(--background);
+        }
+        .menu-icon {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            cursor: pointer;
+            z-index: 1000;
         }
 
-        .aside {
-          display: flex;
-          flex-direction: column;
-          position: relative;
-          transform: translateX(0);
+        @media only screen and (max-width: 750px) {
+            body {
+                grid-template-areas: 
+                    "header"
+                    "content"
+                    "footer";
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                padding-left: 50px; /* Add left padding to make space for the icon on small screens */
+            }
+
+            .sidebar {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 200px;
+                background-color: var(--primary);
+                z-index: 999;
+                overflow-y: auto;
+            }
+
+            .sidebar.active {
+                display: block;
+            }
+
+            .menu-icon {
+                display: block;
+            }
         }
-        
-      }
-
-      .menu-icon {
-        position: fixed;
-        display: flex;
-        top: 2px;
-        left: 8px;
-        align-items: center;
-        justify-content: center;
-        z-index: 1;
-        cursor: pointer;
-        padding: 12px;
-        color: black;
-      }
-
-      .header_search {
-        margin-left: 24px;
-      }
-
-      .aside_close-icon {
-        position: absolute;
-        visibility: visible;
-        top: 20px;
-        right: 20px;
-        cursor: pointer;
-      }
-      @media only screen and (min-width: 750px) {
-        .aside_close-icon {
-          display: none;
-        }
-      }
     </style>
-  </head>
-  <body>
-    <div class="grid-container">
-      <div class="menu-icon">
-        <strong> &#9776;</strong>
-      </div>
-      <header class="header">
-        <div class="header_search">Search...</div>
-        <div class="header_avatar">Logout</div>
-      </header>
-      <aside class="aside">
-        <div class="aside_close-icon">
-          <strong>&times;</strong>
-        </div>
-        <ul class="aside_list">
-          <li class="aside_list-item">Menu item1</li>
-          <li class="aside_list-item">Menu item2</li>
-          <li class="aside_list-item">Menu item3</li>
-          <li class="aside_list-item">Menu item4</li>
-          <li class="aside_list-item">Menu item5</li>
-        </ul>
-      </aside>
-      <main class="main">
-        <h1>Welcome, Admin!</h1>
-        <p>Your dashboard overview.</p> 
-      </main>
-      <footer class="footer">
-        <div class="footer_copyright">&copy;2024 ITIsele S.L.</div>
-        <div class="footer_byline">Made with &hearts;</div>
-      </footer>
+</head>
+<body>
+    <div class="menu-icon">
+        <strong>&#9776;</strong>
     </div>
+    <div class="sidebar">Sidebar</div>
+    
+    <nav class="header">
+        <ul>
+          <li><strong>Acme Corp</strong></li>
+        </ul>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Services</a></li>
+          <li><a href="#">Products</a></li>
+        </ul>
+      </nav>
+    <div class="content">
+        <p>Content goes here...</p>
+        <p style="height: 150vh;">More content to test scrolling.</p>
+    </div>
+    <div class="footer">&copy; ITIsele 2025</div>
     <script type="text/javascript">
-      const menuIcon = document.querySelector('.menu-icon');
-      const aside = document.querySelector('.aside');
-      const asideClose = document.querySelector('.aside_close-icon');
+        const menuIcon = document.querySelector('.menu-icon');
+        const sidebar = document.querySelector('.sidebar');
 
-      function toggle(el, className) {
-        if (el.classList.contains(className)) {
-          el.classList.remove(className);
-        } else {
-          el.classList.add(className);
-        }
-      }
-
-      menuIcon.addEventListener('click', function() {
-        toggle(aside, 'active');
-      });
-
-      asideClose.addEventListener('click', function() {
-        toggle(aside, 'active');
-      });
+        menuIcon.addEventListener('click', function() {
+            sidebar.classList.toggle('active');
+        });
     </script>
-  </body>
+</body>
 </html>
