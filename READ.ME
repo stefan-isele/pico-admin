@@ -1,0 +1,23 @@
+# Whats that ?
+It s Admin panel with pico.css and VUE meant to be simple and lightweight
+
+# build
+Nobuild needed !
+
+# run
+Just open `index.html` in a browser.
+
+## But CORS !
+Because the index.html loads components from other files, you cannot just open it with Chrome or Firefox.
+The browser treat every file as its own origin, so they will throw CORS exceptions.
+You have some options to fix that
+
+## Start chrome ignoring CORS
+With some cmd line options you can still open `index.html` it in Chrome :
+```
+"C:\Program Files\Google\Chrome\Application\chrome.exe" --disable-web-security --user-data-dir="%USERPROFILE%\\chrome-dev
+```
+
+## Use a local server (Python)
+cd into the root of this project
+`python -m http.server 8000`

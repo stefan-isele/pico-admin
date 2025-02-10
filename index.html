@@ -94,21 +94,25 @@
             <sidebar-component @toggle-sidebar="toggleSidebar"></sidebar-component>
         </div>
         <nav class="header">
-            <nav-component></nav-component>
+            <nav-component @navigate="navigate"></nav-component>
         </nav>
         <div class="content">
-            <p>{{ message }}</p>
-            <p style="height: 150vh;">More content to test scrolling.</p>
+            <component :is="currentComponent"></component>
         </div>
         <div class="footer">&copy; ITIsele 2025</div>
     </div>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <script>
+    <script type="module">
+        import AboutComponent from './components/pages/about-component.js';
+        import ServicesComponent from './components/pages/services-component.js';
+        import ProductsComponent from './components/pages/products-component.js';
+
         const app = Vue.createApp({
             data() {
                 return {
                     message: "Hello Vue!",
-                    isSidebarActive: false
+                    isSidebarActive: false,
+                    currentComponent: 'default-component'
                 };
             },
             methods: {
@@ -117,6 +121,9 @@
                 },
                 closeSidebar() {
                     this.isSidebarActive = false;
+                },
+                navigate(component) {
+                    this.currentComponent = component;
                 }
             },
             mounted() {
@@ -147,17 +154,27 @@
                     template: `
                         <ul>
                             <li><strong>Acme Corp</strong></li>
-                            <li><a href="#">About</a></li>
-                            <li><a href="#">Services</a></li>
-                            <li><a href="#">Products</a></li>
+                            <li><a href="#" @click.prevent="$emit('navigate', 'about-component')">About</a></li>
+                            <li><a href="#" @click.prevent="$emit('navigate', 'services-component')">Services</a></li>
+                            <li><a href="#" @click.prevent="$emit('navigate', 'products-component')">Products</a></li>
                         </ul>
                     `
-                }
+                },
+                'default-component': {
+                    template: `<p>{{ message }}</p>`,
+                    data() {
+                        return {
+                            message: "Welcome to the Admin Panel!"
+                        };
+                    }
+                },
+                'about-component': AboutComponent,
+                'services-component': ServicesComponent,
+                'products-component': ProductsComponent
             }
         });
 
         app.mount('#app');
     </script>
 </body>
-</html>
 </html>
