@@ -11,7 +11,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        body {
+        #app {
             display: grid;
             grid-template-areas: 
                 "sidebar header"
@@ -24,13 +24,15 @@
         .sidebar {
             grid-area: sidebar;
             padding: 15px;
-            background-color: var(--pico-form-element-background-color);
-            color: var(--secondary-background);
+            background-color: var(--pico-primary-background);
+            color: white;
         }
         .header {
             grid-area: header;
             padding: 15px;
-            
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         .content {
             grid-area: content;
@@ -54,70 +56,108 @@
             cursor: pointer;
             z-index: 1000;
         }
-
-        @media only screen and (max-width: 750px) {
-            body {
+        @media (max-width: 768px) {
+            #app {
                 grid-template-areas: 
                     "header"
                     "content"
                     "footer";
                 grid-template-columns: 1fr;
+                grid-template-rows: 60px 1fr 40px;
             }
-
-            .header {
-                padding-left: 50px; /* Add left padding to make space for the icon on small screens */
-            }
-
             .sidebar {
                 display: none;
+                grid-area: sidebar;
                 position: fixed;
-                top: 0;
-                left: 0;
-                height: 100%;
                 width: 200px;
-                background-color: var(--primary);
-                z-index: 999;
-                overflow-y: auto;
+                height: 100%;
+                z-index: 1000;
             }
-
             .sidebar.active {
                 display: block;
             }
-
             .menu-icon {
                 display: block;
+            }
+            .header {
+                padding-left: 50px; /* Add padding to avoid overlap */
             }
         }
     </style>
 </head>
 <body>
-    <div class="menu-icon">
-        <strong>&#9776;</strong>
+    <div id="app">
+        <div class="menu-icon" @click="toggleSidebar" ref="menuIcon">
+            <strong>&#9776;</strong>
+        </div>
+        <div class="sidebar" :class="{ active: isSidebarActive }" ref="sidebar">
+            <sidebar-component @toggle-sidebar="toggleSidebar"></sidebar-component>
+        </div>
+        <nav class="header">
+            <nav-component></nav-component>
+        </nav>
+        <div class="content">
+            <p>{{ message }}</p>
+            <p style="height: 150vh;">More content to test scrolling.</p>
+        </div>
+        <div class="footer">&copy; ITIsele 2025</div>
     </div>
-    <div class="sidebar">Sidebar</div>
-    
-    <nav class="header">
-        <ul>
-          <li><strong>Acme Corp</strong></li>
-        </ul>
-        <ul>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Services</a></li>
-          <li><a href="#">Products</a></li>
-        </ul>
-      </nav>
-    <div class="content">
-        <p>Content goes here...</p>
-        <p style="height: 150vh;">More content to test scrolling.</p>
-    </div>
-    <div class="footer">&copy; ITIsele 2025</div>
-    <script type="text/javascript">
-        const menuIcon = document.querySelector('.menu-icon');
-        const sidebar = document.querySelector('.sidebar');
-
-        menuIcon.addEventListener('click', function() {
-            sidebar.classList.toggle('active');
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    message: "Hello Vue!",
+                    isSidebarActive: false
+                };
+            },
+            methods: {
+                toggleSidebar() {
+                    this.isSidebarActive = !this.isSidebarActive;
+                },
+                closeSidebar() {
+                    this.isSidebarActive = false;
+                }
+            },
+            mounted() {
+                document.addEventListener('click', (event) => {
+                    const sidebar = this.$refs.sidebar;
+                    const menuIcon = this.$refs.menuIcon;
+                    if (!sidebar.contains(event.target) && !menuIcon.contains(event.target)) {
+                        this.closeSidebar();
+                    }
+                });
+            },
+            components: {
+                'sidebar-component': {
+                    template: `
+                        <div>
+                            <div @click.stop="toggleSidebar">
+                                Sidebar Content
+                            </div>
+                        </div>
+                    `,
+                    methods: {
+                        toggleSidebar() {
+                            this.$emit('toggle-sidebar');
+                        }
+                    }
+                },
+                'nav-component': {
+                    template: `
+                        <ul>
+                            <li><strong>Acme Corp</strong></li>
+                            <li><a href="#">About</a></li>
+                            <li><a href="#">Services</a></li>
+                            <li><a href="#">Products</a></li>
+                        </ul>
+                    `
+                }
+            }
         });
+
+        app.mount('#app');
     </script>
 </body>
+</html>
 </html>

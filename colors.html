@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pico.css Colors</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.*/css/pico.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            background-color: var(--pico-background-color);
+            color: var(--pico-color);
+        }
+        .color-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid var(--pico-muted-border-color);
+        }
+    </style>
+</head>
+<body>
+    <h1>Pico.css Colors</h1>
+    <script>
+        const colors = [
+            "background-color", "color", "text-selection-color", "muted-color", "muted-border-color", 
+            "primary", "primary-background", "primary-border", "primary-underline", "primary-hover", 
+            "primary-hover-background", "primary-hover-border", "primary-hover-underline", "primary-focus", 
+            "primary-inverse", "secondary", "secondary-background", "secondary-border", "secondary-underline", 
+            "secondary-hover", "secondary-hover-background", "secondary-hover-border", "secondary-hover-underline", 
+            "secondary-focus", "secondary-inverse", "contrast", "contrast-background", "contrast-border", 
+            "contrast-underline", "contrast-hover", "contrast-hover-background", "contrast-hover-border", 
+            "contrast-hover-underline", "contrast-focus", "contrast-inverse", "mark-background-color", 
+            "mark-color", "ins-color", "del-color", "blockquote-border-color", "blockquote-footer-color", 
+            "form-element-background-color", "form-element-border-color", "form-element-color"
+        ];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const container = document.body;
+            colors.forEach(color => {
+                const div = document.createElement("div");
+                div.className = "color-box";
+                div.style.background = `var(--pico-${color})`;
+                div.style.color = "white";
+                div.textContent = `--pico-${color}`;
+                container.appendChild(div);
+            });
+        });
+    </script>
+</body>
+</html>
